@@ -32,9 +32,10 @@ class Manager {
 		$records = $this->fetch_records();
 
 		foreach( $records as $record ) {
+			echo 'Before....';
 			d( $record );
 			$new_html = $this->swap( $record );
-			
+			echo 'After....';
 			d( $new_html );
 		}
 

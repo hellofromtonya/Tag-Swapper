@@ -14,5 +14,5 @@ return array(
 	'old_tag'          => 'p',
 	'new_tag'          => 'h1',
 	'search_attribute' => 'class',
-	'attribute_value'  => 'bar',
+	'attribute_value'  => 'headline1',
 );
