@@ -1,0 +1,42 @@
+{
+    "name" 			: "knowthecode/tag-swapper",
+    "description" 	: "HTML Tag Swapper - replace all occurrences of the tag when it's attributes match the specified value.",
+    "type"          : "project",
+    "keywords" 		: ["wordpress", "wp", "plugin"],
+    "homepage" 		: "https://knowthecode.io",
+    "license" 		: "GPL-2.0+",
+    "authors": [
+        {
+            "name" 	: "hellofromTonya",
+            "email" : "hellofromtonya@knowthecode.io"
+        }
+    ],
+    "require": {
+        "php" : ">=5.4.0"
+    },
+    "require-dev": {
+        "raveren/kint" : "~1.0",
+        "filp/whoops": "~2.0"
+    },
+    "autoload" : {
+        "classmap": [],
+        "files": [
+            "src/class-manager.php",
+            "src/foundation/class-tag-swapper.php"
+        ]
+    },
+    "autoload-dev" : {
+        "files": [
+            "src/support/exceptions.php"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "vendor-dir": "assets/vendor"
+    },
+    "minimum-stability": "dev"
+}
