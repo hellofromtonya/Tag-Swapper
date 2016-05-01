@@ -6,27 +6,27 @@ The Tag Swapper allows you to swap out the HTML tag element based upon the confi
 
 ## FAQ
 
-1. How does it decide what to swap?
+#### How does it decide what to swap?
 
 It uses the options that you configure on the `Tools > Tag Swapper` page.  First it fetches all of the nodes that use the HTML tag you want to replace.  For example, let's say you want to replace all `p` tags that have a `class` attribute with a styling class of `headline`.  The first step is to get all of the nodes that are `p` tag elements.  Then it checks if the `class` attribute has the styling class you selected.  If it does, then it swaps the `p` tag for the one you specified, e.g. `h1`.
 
-2. Does it update the database?
+#### Does it update the database?
 
 Yes.  Once it's done swapping the tags, then it will save only those records that were swapped back to the database.  It does this in one query to speed things up (i.e. verses doing an update on each and every record).
 
-3. Does it work on post meta or custom database tables?
+#### Does it work on post meta or custom database tables?
 
 Not yet. That is a future enhancement.  Right now, it only works with the `wp_posts` database table, i.e. where all of the posts, pages, custom post types, navigation, media, etc. are all stored.
 
-4. What does it change in the database?
+#### What does it change in the database?
 
 It fetches only the `post_content` column (well plus the post `ID`).  This column is where the content is stored, i.e. the content that appears in the WordPress tinyMCE editor.  If it finds a match, it will make the tag swap and then save the updated version back to the database.
 
-5. Does it swap both the opening and closing tag elements?
+#### Does it swap both the opening and closing tag elements?
 
 Yes.  That's the beauty of using PHP `DomDocument`, as it handles this for you.  So if you want to swap a `p` tag with a `h1`, it handles both the opening and closing tags. Cool, eh?
 
-6. Does it use REGEX?
+#### Does it use REGEX?
 
 Nope.  REGEX is not good with searching for all the different patterns and combinations.  Instead, this plugin converts the content into a HTML document, i.e. using PHP `DomDocument`.  It then traverses through the native HTML nodes.  This technique allows the plugin to only fetch the content that has the tag you want to replace and deal with the individual attributes.  No REGEX or pattern matching required.
 
