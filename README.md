@@ -4,9 +4,18 @@ This plugin is currently in development.
 
 The Tag Swapper allows you to swap out the HTML tag element based upon the configured attribute and its value.  It queries the post database records, searches using `DomDocument`, swaps out any matching tags, and then saves the records back to the database.  Migrating an old database or needing a quick way to replace out HTML, ok, here it is.
 
+### How does it decide what to swap?
+
+It uses the options that you configure on the `Tools > Tag Swapper` page.  First it fetches all of the nodes that use the HTML tag you want to replace.  For example, let's say you want to replace all `p` tags that have a `class` attribute with a styling class of `headline`.  The first step is to get all of the nodes that are `p` tag elements.  Then it checks if the `class` attribute has the styling class you selected.  If it does, then it swaps the `p` tag for the one you specified, e.g. `h1`.
+
+### Does it update the database?
+
+Yes.  Once it's done swapping the tags, then it will save only those records that were swapped back to the database.  It does this in one query to speed things up (i.e. verses doing an update on each and every record).
+
 ## Features
 
 You configure the parameters including:
+
 1. the HTML tag element to be replaced
 2. the new HTML tag element, e.g. `p`, `h1`, `div`, etc.
 3. the search attribute, e.g. `class`, `id`, or `data`
@@ -14,6 +23,7 @@ You configure the parameters including:
 5. the post type, as WordPress' posts database table contains posts, pages, revisions, media, custom post types, and more
 
 Other features include:
+
 1. Count the records to know how many will be swapped.
 2. Suppress HTML malformed errors, just in cause your HTML is fully compliant
 
