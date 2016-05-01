@@ -2,7 +2,13 @@
 
 Status:  *In Beta*
 
-The Tag Swapper allows you to swap out the HTML tag element based upon the configured attribute and its value.  It queries the post database records, searches using `DomDocument`, swaps out any matching tags, and then saves the records back to the database.  Migrating an old database or needing a quick way to replace out HTML, ok, here it is.
+The Tag Swapper allows you to swap out the HTML tag element based upon the configured attribute and its value. For example, let's say you inherit an older database that needs to convert some `p` tags to `h1` tags for SEO (just one use case).  Tag Swapper finds all of the `p` tags that match the `attribute` and its value that you configure, swaps the tag, and then saves it back to the database.  No more having to go from post-to-post or page-to-page to change the tags.  Tag Swapper takes care of it for you.
+
+Example:
+
+You have this content: `<p class="large-text headline">some content</p>`.  You want to replace the `p` tag with a `h1` when the `class` has a `headline` value.  Tag Swapper finds only those HTML elements with this pattern and changes it to: `<h1 class="large-text headline">some content</h1>`.
+
+Every single occurrence in the `p` tag that also has a `class` attribute value of `headline`, regardless if it also has other styling classes, is changed.
 
 ## FAQ
 
