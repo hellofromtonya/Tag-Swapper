@@ -15,15 +15,32 @@ use DOMElement;
 
 class Tag_Swapper {
 
+	/**
+	 * Flags if the content has changed
+	 *
+	 * @var bool
+	 */
+	protected $content_changed = false;
+
+	/**
+	 * Configuration array
+	 *
+	 * @var array
+	 */
 	protected $config = array();
 
-	protected $default_config = array(
-		'old_tag'          => '',
-		'new_tag'          => '',
-		'search_attribute' => 'class',
-		'attribute_value'  => '',
-	);
+	/**
+	 * Instance of the DOMDocument
+	 *
+	 * @var DOMDocument
+	 */
+	protected $document;
 
+	/**
+	 * Array of valid HTML attributes
+	 *
+	 * @var array
+	 */
 	protected $attributes = array(
 		'id',
 		'class',
@@ -35,11 +52,11 @@ class Tag_Swapper {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $config
+	 * @param array $config Runtime configuration parameters
 	 * @param array $attributes
 	 */
 	public function __construct( array $config, array $attributes = array() ) {
-		$this->config = wp_parse_args( $config, $this->default_config );
+		$this->config = $config;
 
 		if ( $attributes ) {
 			$this->attributes = $attributes;
@@ -57,31 +74,66 @@ class Tag_Swapper {
 	 */
 	public function swap( $html ) {
 
-		$wrapped_html = '<body>' . $html . '</body>';
-
-		$document = new DOMDocument();
-		$document->loadHTML( $wrapped_html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
-
-		$elements = $document->getElementsByTagName( $this->config['old_tag'] );
-		if ( $elements->length == 0 ) {
-			return $html;
+		$elements = $this->get_html_elements( $html );
+		if ( ! $elements ) {
+			return false;
 		}
+
+		$this->content_changed = false;
 
 		foreach ( $elements as $element ) {
 			$search_attribute = $element->getAttribute( $this->config['search_attribute'] );
 
-			if ( strpos( $search_attribute, $this->config['attribute_value'] ) === false ) {
+			if ( ! $search_attribute || strpos( $search_attribute, $this->config['attribute_value'] ) === false ) {
 				continue;
 			}
 
-			$new_element = $this->build_replacement_element( $document, $element, $this->config );
+			$new_element = $this->build_replacement_element( $element, $this->config );
 
 			$element->parentNode->replaceChild( $new_element, $element );
+
+			$this->content_changed = true;
 		}
 
-		$html = $document->saveHTML();
+		if ( ! $this->content_changed ) {
+			return false;
+		}
+
+		$html = $this->document->saveHTML();
+
+		$this->document = null;
 
 		return $this->strip_wrappers_from_html( $html );
+	}
+
+	/**
+	 * Loads the DOM Document and fetches the elements by the (old) tag name.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $html
+	 *
+	 * @return bool|\DOMNodeList
+	 */
+	protected function get_html_elements( $html ) {
+		$this->document = new DOMDocument();
+
+		if ( $this->config['suppress_errors'] === true ) {
+			libxml_use_internal_errors( true );
+			@$this->document->loadHTML( $html, LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING );
+			libxml_clear_errors();
+			
+		} else {
+			$this->document->loadHTML( $html, LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING );
+		}
+
+		if ( empty( $this->document ) ) {
+			return false;
+		}
+
+		$elements = $this->document->getElementsByTagName( $this->config['old_tag'] );
+
+		return $elements->length == 0 ? false : $elements;
 	}
 
 	/**
@@ -94,9 +146,12 @@ class Tag_Swapper {
 	 * @return string
 	 */
 	protected function strip_wrappers_from_html( $html ) {
-		$html = substr( $html, 0, - 8 );
+		$ending_tags_offset   = ( strlen( '</body></html>' ) + 1 ) * - 1;
+		$starting_tags_offset = strlen( '<html><body>' );
 
-		return substr( $html, 6 );
+		$html = substr( $html, 0, $ending_tags_offset );
+
+		return substr( $html, $starting_tags_offset );
 	}
 
 	/**
@@ -104,14 +159,12 @@ class Tag_Swapper {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param DOMDocument $document
 	 * @param DOMElement $old_element
 	 *
 	 * @return DOMElement
 	 */
-	protected function build_replacement_element( DOMDocument $document, DOMElement $old_element ) {
-
-		$new_element = $document->createElement( $this->config['new_tag'] );
+	protected function build_replacement_element( DOMElement $old_element ) {
+		$new_element = $this->document->createElement( $this->config['new_tag'] );
 
 		foreach ( $this->attributes as $attribute ) {
 			if ( $old_element->hasAttribute( $attribute ) ) {

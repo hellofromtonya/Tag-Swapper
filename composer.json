@@ -21,8 +21,10 @@
     "autoload" : {
         "classmap": [],
         "files": [
-            "src/class-manager.php",
-            "src/foundation/class-tag-swapper.php"
+            "src/class-controller.php",
+            "src/foundation/class-db-handler.php",
+            "src/foundation/class-tag-swapper.php",
+            "src/admin/class-admin-page.php"
         ]
     },
     "autoload-dev" : {

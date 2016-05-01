@@ -1,0 +1,11 @@
+.tag-swapper-message,
+.backup-database-message {
+    background-color: #627f00;
+    padding: 30px;
+    color: #fff;
+}
+
+.tag-swapper-no-records-processed,
+.backup-database-message {
+    background-color: #f00000;
+}

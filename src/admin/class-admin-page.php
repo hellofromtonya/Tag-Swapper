@@ -1,0 +1,172 @@
+<?php
+/**
+ * Description
+ *
+ * @package     Tag_Swapper\Admin
+ * @since       1.0.0
+ * @author      hellofromTonya
+ * @link        https://knowthecode.io
+ * @license     GNU General Public License 2.0+
+ */
+
+namespace Tag_Swapper\Admin;
+
+use Tag_Swapper\Controller;
+
+class Admin_Page {
+
+	/**
+	 * Configuration array
+	 *
+	 * @var array
+	 */
+	protected $config = array();
+
+	/**
+	 * Processed settings values
+	 *
+	 * @var array
+	 */
+	protected $settings = array();
+
+	/**
+	 * Records Count
+	 *
+	 * @var int
+	 */
+	protected $records_count = 0;
+
+	/**
+	 * Menu ID
+	 *
+	 * @var int
+	 */
+	protected $menu_id;
+
+	/**
+	 * Flag indicated that the tag swap or count process is complete.
+	 *
+	 * @var bool
+	 */
+	protected $process_is_complete = false;
+
+	/*******************
+	 * Setters
+	 ******************/
+
+	/**
+	 * Sets the number of processed counts.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $count
+	 *
+	 * @return void
+	 */
+	public function setProcessedCount( $count ) {
+		$this->records_count = $count;
+	}
+
+	/**
+	 * Sets the state of Process is Complete flag
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $state
+	 *
+	 * @return void
+	 */
+	public function setProcessIsComplete( $state ) {
+		$this->process_is_complete = $state;
+	}
+
+	/**************************
+	 * Instantiate & Initialize
+	 *************************/
+
+	/**
+	 * Instantiate the object
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $config
+	 * @param array $selected_settings
+	 */
+	public function __construct( array $config, array $selected_settings ) {
+		$this->config         = $config;
+		$this->current_values = $selected_settings;
+
+		$this->init_events();
+	}
+
+	/**
+	 * Initialize the events.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	protected function init_events() {
+		add_action( 'admin_menu', array( $this, 'add_submenu_page' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+	}
+
+	/**
+	 * Add the menu page to the Tools Menu
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function add_submenu_page() {
+		$this->menu_id = add_submenu_page(
+			'tools.php',
+			__( 'Tag Swapper', 'tag_swapper' ),
+			__( 'Tag Swapper', 'tag_swapper' ),
+			'manage_options',
+			'tag_swapper',
+			array( $this, 'render_menu_page' )
+		);
+	}
+
+	/**
+	 * Enqueue assets
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $hook Current page
+	 *
+	 * @return null
+	 */
+	public function enqueue_assets( $hook ) {
+		if ( $this->menu_id !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'tag_swapper_css',
+			TAG_SWAPPER_PLUGIN_URL . 'assets/css/tag-swapper.css',
+			array(),
+			Controller::VERSION
+		);
+	}
+
+	/**
+	 * Render the Utility Page
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function render_menu_page() {
+		$view = __DIR__ . $this->config['view'];
+
+		if ( ! is_readable( $view ) ) {
+			return;
+		}
+
+		$message_class = $this->records_count < 1 ? ' tag-swapper-no-records-processed'  : '';
+
+		require( $view );
+	}
+}

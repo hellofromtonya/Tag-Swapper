@@ -1,6 +1,6 @@
 <?php
 /**
- * Markup Swapper Runtime configuration
+ * Db Handler runtime configuration parameters
  *
  * @package     Tag_Swapper\Foundation
  * @since       1.0.0
@@ -10,4 +10,8 @@
  */
 namespace Tag_Swapper\Foundation;
 
-return $;
+$config = $_POST['tag_swapper'];
+
+$config['security_nonce'] = '_tag_swapper';
+
+return $config;

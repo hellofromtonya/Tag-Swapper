@@ -2,13 +2,13 @@
 /**
  * Exception handling
  *
- * @package     Tag_Swapper
+ * @package     Tag_Swapper\Support
  * @since       1.0.0
  * @author      hellofromTonya
  * @link        https://knowthecode.io
  * @license     GNU General Public License 2.0+
  */
-namespace Tag_Swapper;
+namespace Tag_Swapper\Support;
 
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
