@@ -84,7 +84,7 @@ class Tag_Swapper {
 		foreach ( $elements as $element ) {
 			$search_attribute = $element->getAttribute( $this->config['search_attribute'] );
 
-			if ( ! $search_attribute || strpos( $search_attribute, $this->config['attribute_value'] ) === false ) {
+			if ( ! $this->search_attribute_found( $search_attribute ) ) {
 				continue;
 			}
 
@@ -95,6 +95,19 @@ class Tag_Swapper {
 			$this->content_changed = true;
 		}
 
+		return $this->update_html( $html );
+	}
+
+	/**
+	 * Updates the HTML to finalize the swap.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $html
+	 *
+	 * @return bool|string
+	 */
+	protected function update_html( $html ) {
 		if ( ! $this->content_changed ) {
 			return false;
 		}
@@ -104,6 +117,19 @@ class Tag_Swapper {
 		$this->document = null;
 
 		return $this->strip_wrappers_from_html( $html );
+	}
+
+	/**
+	 * Checks if this node has the search attribute and its value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $search_attribute
+	 *
+	 * @return bool
+	 */
+	protected function search_attribute_found( $search_attribute ) {
+		return $search_attribute && strpos( $search_attribute, $this->config['attribute_value'] ) !== false;
 	}
 
 	/**
@@ -122,7 +148,7 @@ class Tag_Swapper {
 			libxml_use_internal_errors( true );
 			@$this->document->loadHTML( $html, LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING );
 			libxml_clear_errors();
-			
+
 		} else {
 			$this->document->loadHTML( $html, LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING );
 		}

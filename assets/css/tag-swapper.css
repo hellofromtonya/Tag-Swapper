@@ -5,7 +5,10 @@
     color: #fff;
 }
 
-.tag-swapper-no-records-processed,
-.backup-database-message {
+.tag-swapper-no-records-processed {
     background-color: #f00000;
+}
+
+.backup-database-message {
+    background-color: #cb4b14;
 }

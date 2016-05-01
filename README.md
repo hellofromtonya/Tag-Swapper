@@ -1,16 +1,34 @@
 # Tag Swapper Plugin
 
-This plugin is currently in development.
+Status:  *In Beta*
 
 The Tag Swapper allows you to swap out the HTML tag element based upon the configured attribute and its value.  It queries the post database records, searches using `DomDocument`, swaps out any matching tags, and then saves the records back to the database.  Migrating an old database or needing a quick way to replace out HTML, ok, here it is.
 
-### How does it decide what to swap?
+## FAQ
+
+1. How does it decide what to swap?
 
 It uses the options that you configure on the `Tools > Tag Swapper` page.  First it fetches all of the nodes that use the HTML tag you want to replace.  For example, let's say you want to replace all `p` tags that have a `class` attribute with a styling class of `headline`.  The first step is to get all of the nodes that are `p` tag elements.  Then it checks if the `class` attribute has the styling class you selected.  If it does, then it swaps the `p` tag for the one you specified, e.g. `h1`.
 
-### Does it update the database?
+2. Does it update the database?
 
 Yes.  Once it's done swapping the tags, then it will save only those records that were swapped back to the database.  It does this in one query to speed things up (i.e. verses doing an update on each and every record).
+
+3. Does it work on post meta or custom database tables?
+
+Not yet. That is a future enhancement.  Right now, it only works with the `wp_posts` database table, i.e. where all of the posts, pages, custom post types, navigation, media, etc. are all stored.
+
+4. What does it change in the database?
+
+It fetches only the `post_content` column (well plus the post `ID`).  This column is where the content is stored, i.e. the content that appears in the WordPress tinyMCE editor.  If it finds a match, it will make the tag swap and then save the updated version back to the database.
+
+5. Does it swap both the opening and closing tag elements?
+
+Yes.  That's the beauty of using PHP `DomDocument`, as it handles this for you.  So if you want to swap a `p` tag with a `h1`, it handles both the opening and closing tags. Cool, eh?
+
+6. Does it use REGEX?
+
+Nope.  REGEX is not good with searching for all the different patterns and combinations.  Instead, this plugin converts the content into a HTML document, i.e. using PHP `DomDocument`.  It then traverses through the native HTML nodes.  This technique allows the plugin to only fetch the content that has the tag you want to replace and deal with the individual attributes.  No REGEX or pattern matching required.
 
 ## Features
 
@@ -54,6 +72,19 @@ Installation from GitHub is as simple as cloning the repo onto your local machin
 6. If you want to only count the records that will be swapped, click on "Yes" for the "Just count the records" option.
 7. By default, the HTML malformed errors are suppressed.  However, if you want to see them, then click on the "No" option.
 8. Then click on the "Run the Tag Swapper" button.
+
+## Yet to Do
+
+Before I release this officially to [WordPress.org](https://worpress.org), there a few more things to do including:
+
+1. Add error messaging
+2. Test on a really HUGE database, i.e. over 5k pages or posts
+3. Run it through more beta testers.
+
+Future Enhancements:
+
+1. Expand it to more than just the posts database table.
+2. Process the HTML malformed error messaging to let you find the boo boos in your content more easily.
 
 ## Contributions
 
