@@ -3,7 +3,7 @@
  * Admin Page Handler - which is responsible for rendering out the Tools > Tag Swapper admin page.
  *
  * @package     Tag_Swapper\Admin
- * @since       1.0.2
+ * @since       1.0.3
  * @author      hellofromTonya
  * @link        https://knowthecode.io
  * @license     GNU General Public License 2.0+
@@ -149,6 +149,10 @@ class Admin_Page {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
+	/**************************
+	 * Callbacks
+	 *************************/
+
 	/**
 	 * Add the menu page to the Tools Menu
 	 *
@@ -190,9 +194,9 @@ class Admin_Page {
 	}
 
 	/**
-	 * Render the Utility Page
+	 * Render the Tag Swapper Page
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 *
 	 * @return void
 	 */

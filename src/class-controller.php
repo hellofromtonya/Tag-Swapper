@@ -14,6 +14,10 @@ use Tag_Swapper\Admin\Admin_Page;
 use Tag_Swapper\Foundation\DB_Handler;
 use Tag_Swapper\Foundation\Tag_Swapper;
 
+if ( ! function_exists( 'apply_filters' ) ) {
+	die( 'Heya, you silly goose. You can\'t call me directly.' );
+}
+
 class Controller {
 
 	/**
@@ -59,15 +63,42 @@ class Controller {
 	protected $db_handler;
 
 	/*************************
-	 * Getters
+	 * Getters & Setters
 	 ************************/
 
+	/**
+	 * Get the plugin's version number.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
 	public function version() {
 		return self::VERSION;
 	}
 
+	/**
+	 * Get the WordPress minimum version.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
 	public function min_wp_version() {
 		return self::MIN_WP_VERSION;
+	}
+
+	/**
+	 * Set the Db Handler - this is separated out, as we only need it when handling the swapping.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param Foundation\DB_Handler $db_handler
+	 *
+	 * @return void
+	 */
+	public function setDbHandler( DB_Handler $db_handler ) {
+		$this->db_handler = $db_handler;
 	}
 
 	/**************************
@@ -89,18 +120,9 @@ class Controller {
 		$this->swapper    = $swapper;
 	}
 
-	/**
-	 * Set the Db Handler - this is separated out, as we only need it when handling the swapping.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param Foundation\DB_Handler $db_handler
-	 *
-	 * @return void
-	 */
-	public function setDbHandler( DB_Handler $db_handler ) {
-		$this->db_handler = $db_handler;
-	}
+	/**************************
+	 * Run
+	 *************************/
 
 	/**
 	 * Time to run the tag swapper.  There are two processes:
@@ -158,6 +180,10 @@ class Controller {
 	public function is_count_process() {
 		return $this->config['count_records'] === true;
 	}
+
+	/**************************
+	 * Worker Methods
+	 *************************/
 
 	/**
 	 * Fetch the records from the database.

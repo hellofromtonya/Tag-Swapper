@@ -3,7 +3,7 @@
  * Tag swapper handler - swaps out the specified tag by the attribute and value pair.
  *
  * @package     Tag_Swapper\Foundation
- * @since       1.0.1
+ * @since       1.0.2
  * @author      hellofromTonya
  * @link        https://knowthecode.io
  * @license     GNU General Public License 2.0+
@@ -63,6 +63,10 @@ class Tag_Swapper {
 	 */
 	protected $limit_to_one_tag_swap = false;
 
+	/**************************
+	 * Instantiate & Initialize
+	 *************************/
+
 	/**
 	 * Instantiate the swapper
 	 *
@@ -119,6 +123,10 @@ class Tag_Swapper {
 
 		return $this->update_html( $html );
 	}
+
+	/**************************
+	 * Worker Methods
+	 *************************/
 
 	/**
 	 * Checks if the tag should occur.  It will not occur if:
