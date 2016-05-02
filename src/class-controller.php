@@ -1,9 +1,9 @@
 <?php
 /**
- * Description
+ * Tag Swapper Controller
  *
  * @package     Tag_Swapper
- * @since       1.0.0
+ * @since       1.0.1
  * @author      hellofromTonya
  * @link        https://knowthecode.io
  * @license     GNU General Public License 2.0+
@@ -21,7 +21,7 @@ class Controller {
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.0.0';
+	const VERSION = '1.0.1';
 
 	/**
 	 * The plugin's minimum WordPress requirement

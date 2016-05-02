@@ -3,7 +3,7 @@
  * Tag swapper handler - swaps out the specified tag by the attribute and value pair.
  *
  * @package     Tag_Swapper\Foundation
- * @since       1.0.0
+ * @since       1.0.1
  * @author      hellofromTonya
  * @link        https://knowthecode.io
  * @license     GNU General Public License 2.0+
@@ -120,16 +120,57 @@ class Tag_Swapper {
 	}
 
 	/**
-	 * Checks if this node has the search attribute and its value.
+	 * Checks if this node's attribute value is a match.  To make sure we have the exact attribute value
+	 * and not just a substring of it (e.g. headline vs. headline1), this method will do the following
+	 * checks:
 	 *
-	 * @since 1.0.0
+	 *      1. Does the value contain the one being searched for?
+	 *      2. Next we check for an exact match.
 	 *
-	 * @param string $search_attribute
+	 * @since 1.0.1
+	 *
+	 * @param string $search_attribute_value
 	 *
 	 * @return bool
 	 */
-	protected function search_attribute_found( $search_attribute ) {
-		return $search_attribute && strpos( $search_attribute, $this->config['attribute_value'] ) !== false;
+	protected function search_attribute_found( $search_attribute_value ) {
+		if ( ! $search_attribute_value ) {
+			return false;
+		}
+
+		$found = strpos( $search_attribute_value, $this->config['attribute_value'] ) !== false;
+
+		if ( ! $found ) {
+			return false;
+		}
+
+		return $this->search_attribute_value_is_exact_match( $search_attribute_value );
+	}
+
+	/**
+	 * Checks if the value is an exact match for the one being searched for.  How does it
+	 * determine if it's an exact match?
+	 *
+	 *      1. Separate out the values by words (as an attribute can have multiple values).
+	 *      2. Iterate through the values and check that the value and data type are a match.
+	 *         If yes, then it found a match; return true.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @param string $search_attribute_value
+	 *
+	 * @return bool
+	 */
+	protected function search_attribute_value_is_exact_match( $search_attribute_value ) {
+		$attribute_values = explode( ' ', trim( $search_attribute_value ) );
+
+		foreach( $attribute_values as $attribute ) {
+			if ( $attribute === $this->config['attribute_value'] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

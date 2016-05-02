@@ -34,7 +34,11 @@ Yes.  That's the beauty of using PHP `DomDocument`, as it handles this for you. 
 
 #### Does it use REGEX?
 
-Nope.  REGEX is not good with searching for all the different patterns and combinations.  Instead, this plugin converts the content into a HTML document, i.e. using PHP `DomDocument`.  It then traverses through the native HTML nodes.  This technique allows the plugin to only fetch the content that has the tag you want to replace and deal with the individual attributes.  No REGEX or pattern matching required.
+Nope.  REGEX is not good with searching for all the different patterns and combinations.  Instead, this plugin converts the content into a HTML document, i.e. using PHP `DOMDocument`.  It then traverses through the native HTML nodes.  This technique allows the plugin to only fetch the content that has the tag you want to replace and deal with the individual attributes.  No REGEX or pattern matching required.
+
+#### PHP Warnings when running the tag swapper?
+
+If you are running a plugin such as  Query Monitor or similar, you may see the PHP `DOMDocument` warnings if you have malformed HTML.  The plugin suppresses these by default.  A future enhancement will include a report to help you identify where the issues are in your HTML.
 
 ## Features
 
@@ -76,8 +80,7 @@ Installation from GitHub is as simple as cloning the repo onto your local machin
 4. Type in the search attribute value.  For example, if you specified a `class` attribute, then type in the styling class that you want to find.
 5. Select the Post Type, such as Posts or Pages.
 6. If you want to only count the records that will be swapped, click on "Yes" for the "Just count the records" option.
-7. By default, the HTML malformed errors are suppressed.  However, if you want to see them, then click on the "No" option.
-8. Then click on the "Run the Tag Swapper" button.
+7. Then click on the "Run the Tag Swapper" button.
 
 ## Yet to Do
 

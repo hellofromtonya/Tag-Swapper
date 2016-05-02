@@ -97,21 +97,7 @@
 						<input type="radio" name="tag_swapper[count_records]" value="<?php echo $value; ?>"<?php checked( (bool) $value, $this->current_values['count_records'] ); ?> /> <?php echo $label ?>
 						<?php endforeach; ?>
 					</p>
-					<span class="description"><?php _e( 'When setting to "Yes", you will get a count of the number of records that will be processed.', 'tag_swapper' ); ?></span>
-					</p>
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">
-					<label for="tag_swapper[suppress_errors]"><?php _e( 'Do you want to suppress HTML malformed errors?', 'tag_swapper' ); ?></label>
-				</th>
-				<td>
-					<p>
-						<?php foreach ( $this->config['yes_no_labels'] as $value => $label ) : ?>
-							<input type="radio" name="tag_swapper[suppress_errors]" value="<?php echo $value; ?>"<?php checked( (bool) $value, $this->current_values['suppress_errors'] ); ?> /> <?php echo $label ?>
-						<?php endforeach; ?>
-					</p>
-					<span class="description"><?php _e( 'When setting to "Yes", the HTML malformed errors and warnings will be suppressed.', 'tag_swapper' ); ?></span>
+					<span class="description"><?php _e( 'When setting to "Yes", you will get a count of the number of records that will be processed. This is just a count, as it does not change the tags or update your database.', 'tag_swapper' ); ?></span>
 					</p>
 				</td>
 			</tr>

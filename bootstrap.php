@@ -11,7 +11,7 @@
  * Plugin Name:     HTML Tag Swapper
  * Plugin URI:      https://knowthecode.io
  * Description:     HTML Tag Swapper - queries the database, replaces all occurrences of the tag when it's attributes match the specified value, and saves the records back to the database.
- * Version:         1.0.0
+ * Version:         1.0.1
  * Author:          hellofromTonya
  * Author URI:      https://knowthecode.io
  * Text Domain:     tag_swapper

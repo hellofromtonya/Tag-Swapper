@@ -16,6 +16,6 @@ return array(
 	'search_attribute' => 'class',
 	'attribute_value'  => '',
 	'post_type'        => 'post',
-	'count_records'    => false,
+	'count_records'    => true,
 	'suppress_errors'  => true,
 );
