@@ -56,6 +56,7 @@ Other features include:
 
 1. Count the records to know how many will be swapped.
 2. Suppress HTML malformed errors, just in case your HTML is not fully compliant
+3. Limits `h1` tag swap to only one occurrence per record (document).
 
 ## Installation
 
@@ -95,8 +96,14 @@ Before I release this officially to [WordPress.org](https://worpress.org), there
 Future Enhancements:
 
 1. Expand it to more than just the posts database table.
-2. Process the HTML malformed warning messages to let you find the boo boos in your content more easily.
+2. Generate a report to show you where invalid HTML is occurring in your content.
+3. Generate report for non-swapped tags when `h1` is limited to only one occurrence.
 
 ## Contributions
 
 All feedback, bug reports, and pull requests are welcome.
+
+
+## Special Thanks
+
+A special thank you to [Jackie D'Elia](http://jackiedelia.com) for beta testing this plugin.

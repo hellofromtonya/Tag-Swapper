@@ -117,8 +117,8 @@
 
 <div class="messages">
 	<?php if ( $this->current_values['count_records'] === true ) : ?>
-	<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'There are %s records which contain the HTML pattern you have specified, i.e. which would be processed by this plugin.', 'tag_swapper' ), (int) $this->records_count ); ?></p>
+	<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'There are %d records which contain the HTML pattern you have specified. Processed in %f seconds.', 'tag_swapper' ), (int) $this->records_count, $this->processing_time_in_seconds ); ?></p>
 	<?php elseif ( $this->process_is_complete ) : ?>
-		<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'Tag Swap is complete.  %s records were updated.', 'tag_swapper' ), (int) $this->records_count ); ?></p>
+		<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'Tag Swap is complete.  %d records were updated with %d tags swapped.  Processed in %f seconds.', 'tag_swapper' ), (int) $this->records_count, (int) $this->number_tag_swaps, $this->processing_time_in_seconds ); ?></p>
 	<?php endif; ?>
 </div>

@@ -59,6 +59,7 @@ class DB_Handler {
 	public function getRecords() {
 		global $wpdb;
 
+//		$sql_query = $wpdb->prepare( "SELECT ID, post_content FROM {$wpdb->posts} WHERE ID IN ( %d ) ", 37299 );
 		$sql_query = $wpdb->prepare( "SELECT ID, post_content FROM {$wpdb->posts} WHERE post_content <> '' AND post_type IN ( %s )", $this->post_type );
 
 		$results = $wpdb->get_results( $sql_query );

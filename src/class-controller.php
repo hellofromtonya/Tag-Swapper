@@ -111,11 +111,13 @@ class Controller {
 	 * For the count only, we have to process the records in
 	 * order to get a count.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.2
 	 *
 	 * @return void
 	 */
 	public function run() {
+		$this->admin_page->setProcessIsComplete( false );
+
 		$records = $this->fetch_records();
 		$this->swap( $records );
 
@@ -126,7 +128,7 @@ class Controller {
 			$this->update_records();
 		}
 
-		$this->admin_page->setProcessIsComplete( true );
+		$this->admin_page->setProcessIsComplete( true, $this->swapper->number_of_swaps );
 	}
 
 	/**
@@ -191,7 +193,7 @@ class Controller {
 		$updated_records = array();
 
 		foreach ( $records as $record ) {
-			$content = $this->swapper->swap( $record->post_content );
+			$content = $this->swapper->swap( $record->post_content, $record->ID );
 
 			$this->set_record( $record->ID, $content );
 		}

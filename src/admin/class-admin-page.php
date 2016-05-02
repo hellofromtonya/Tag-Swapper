@@ -1,9 +1,9 @@
 <?php
 /**
- * Description
+ * Admin Page Handler - which is responsible for rendering out the Tools > Tag Swapper admin page.
  *
  * @package     Tag_Swapper\Admin
- * @since       1.0.0
+ * @since       1.0.2
  * @author      hellofromTonya
  * @link        https://knowthecode.io
  * @license     GNU General Public License 2.0+
@@ -50,6 +50,27 @@ class Admin_Page {
 	 */
 	protected $process_is_complete = false;
 
+	/**
+	 * Internal process start time
+	 *
+	 * @var int
+	 */
+	protected $process_start_time = 0;
+
+	/**
+	 * Total processing time in seconds
+	 *
+	 * @var int
+	 */
+	public $processing_time_in_seconds = 0;
+
+	/**
+	 * Number of Tags Swapped
+	 *
+	 * @var int
+	 */
+	protected $number_tag_swaps = 0;
+
 	/*******************
 	 * Setters
 	 ******************/
@@ -76,8 +97,16 @@ class Admin_Page {
 	 *
 	 * @return void
 	 */
-	public function setProcessIsComplete( $state ) {
+	public function setProcessIsComplete( $state, $number_tag_swaps = 0 ) {
 		$this->process_is_complete = $state;
+		$this->number_tag_swaps    = $number_tag_swaps;
+
+		if ( $state ) {
+			$this->processing_time_in_seconds = microtime( true ) - $this->process_start_time;
+		} else {
+			$this->process_start_time         = microtime( true );
+			$this->processing_time_in_seconds = 0;
+		}
 	}
 
 	/**************************
@@ -165,7 +194,7 @@ class Admin_Page {
 			return;
 		}
 
-		$message_class = $this->records_count < 1 ? ' tag-swapper-no-records-processed'  : '';
+		$message_class = $this->records_count < 1 ? ' tag-swapper-no-records-processed' : '';
 
 		require( $view );
 	}

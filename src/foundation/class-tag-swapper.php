@@ -12,6 +12,7 @@ namespace Tag_Swapper\Foundation;
 
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 
 class Tag_Swapper {
 
@@ -48,9 +49,24 @@ class Tag_Swapper {
 	);
 
 	/**
+	 * Tracks the total number of tag swaps
+	 *
+	 * @var int
+	 */
+	public $number_of_swaps = 0;
+
+	/**
+	 * Limit the swap to only one occurrence
+	 * (handy for limiting `h1` tag)
+	 *
+	 * @var bool
+	 */
+	protected $limit_to_one_tag_swap = false;
+
+	/**
 	 * Instantiate the swapper
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.2
 	 *
 	 * @param array $config Runtime configuration parameters
 	 * @param array $attributes
@@ -61,12 +77,16 @@ class Tag_Swapper {
 		if ( $attributes ) {
 			$this->attributes = $attributes;
 		}
+
+		if ( $config['new_tag'] == 'h1' ) {
+			$this->limit_to_one_tag_swap = true;
+		}
 	}
 
 	/**
 	 * Replace the HTML element by the pattern.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.2
 	 *
 	 * @param string $html
 	 *
@@ -78,24 +98,47 @@ class Tag_Swapper {
 		if ( ! $elements ) {
 			return false;
 		}
-
+		
 		$this->content_changed = false;
 
 		foreach ( $elements as $element ) {
-			$search_attribute = $element->getAttribute( $this->config['search_attribute'] );
-
-			if ( ! $this->search_attribute_found( $search_attribute ) ) {
+			if ( ! $this->is_ok_to_swap_tag( $element ) ) {
 				continue;
 			}
 
-			$new_element = $this->build_replacement_element( $element, $this->config );
+			if ( $this->limit_to_one_tag_swap && $this->content_changed ) {
+				break;
+			}
+
+			$new_element = $this->build_replacement_element( $element );
 
 			$element->parentNode->replaceChild( $new_element, $element );
 
-			$this->content_changed = true;
+			$this->update_stats_upon_tag_swap();
 		}
 
 		return $this->update_html( $html );
+	}
+
+	/**
+	 * Checks if the tag should occur.  It will not occur if:
+	 *
+	 *      1. The tag is not the same as the one to be replaced
+	 *      2. The attribute value is not what we are looking for
+	 *
+	 * @since 1.0.2
+	 *
+	 * @param DOMElement $element
+	 *
+	 * @return bool
+	 */
+	protected function is_ok_to_swap_tag( DOMElement $element ) {
+		if ( $element->nodeName !== $this->config['old_tag'] ) {
+			return false;
+		}
+
+		$search_attribute_value = $element->getAttribute( $this->config['search_attribute'] );
+		return $this->search_attribute_found( $search_attribute_value );
 	}
 
 	/**
@@ -176,14 +219,15 @@ class Tag_Swapper {
 	/**
 	 * Loads the DOM Document and fetches the elements by the (old) tag name.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.2
 	 *
 	 * @param string $html
 	 *
-	 * @return bool|\DOMNodeList
+	 * @return bool|DOMNodeList
 	 */
 	protected function get_html_elements( $html ) {
 		$this->document = new DOMDocument();
+		$this->document->strictErrorChecking = false;
 
 		if ( $this->config['suppress_errors'] === true ) {
 			libxml_use_internal_errors( true );
@@ -194,11 +238,25 @@ class Tag_Swapper {
 			$this->document->loadHTML( $html, LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING );
 		}
 
+		$this->document->normalizeDocument();
+
 		if ( empty( $this->document ) ) {
 			return false;
 		}
 
-		$elements = $this->document->getElementsByTagName( $this->config['old_tag'] );
+		/**
+		 * version 1.0.2 Bug fix - When the HTML is invalid, it will not fetch the tags after the invalid warning
+		 * occurs.  This means that any remaining tags within the record's content will not be swapped.  That's not
+		 * good, as the site owner or developer does not know s/he has a HTML markup issue or that the swap did not
+		 * occur after that point.
+		 *
+		 * Pulling all of the tag nodes fixes this problem.  However, it causes more processing time, as we have to
+		 * loop through all of the nodes instead of just the specific ones.
+		 *
+		 * TODO-Tonya: We will need to test if this is a problem on HUGE databases, i.e. over 5k records.
+		 */
+		$elements = $this->document->getElementsByTagName( '*' );
+//		$elements = $this->document->getElementsByTagName( $this->config['old_tag'] );
 
 		return $elements->length == 0 ? false : $elements;
 	}
@@ -242,5 +300,17 @@ class Tag_Swapper {
 		$new_element->nodeValue = $old_element->nodeValue;
 
 		return $new_element;
+	}
+
+	/**
+	 * Updates the stats when a tag swap occurs.
+	 *
+	 * @since 1.0.2
+	 *
+	 * @return void
+	 */
+	protected function update_stats_upon_tag_swap() {
+		$this->content_changed = true;
+		$this->number_of_swaps++;
 	}
 }
