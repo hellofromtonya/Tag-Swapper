@@ -36,9 +36,11 @@ Yes.  That's the beauty of using PHP `DomDocument`, as it handles this for you. 
 
 Nope.  REGEX is not good with searching for all the different patterns and combinations.  Instead, this plugin converts the content into a HTML document, i.e. using PHP `DOMDocument`.  It then traverses through the native HTML nodes.  This technique allows the plugin to only fetch the content that has the tag you want to replace and deal with the individual attributes.  No REGEX or pattern matching required.
 
-#### PHP Warnings when running the tag swapper?
+#### What are the PHP Warnings when running the tag swapper?
 
-If you are running a plugin such as  Query Monitor or similar, you may see the PHP `DOMDocument` warnings if you have malformed HTML.  The plugin suppresses these by default.  A future enhancement will include a report to help you identify where the issues are in your HTML.
+If you are running a plugin such as [Query Monitor](https://wordpress.org/plugins/query-monitor/) or similar, you may see the PHP `DOMDocument` warnings if you have malformed HTML.  The plugin suppresses these warnings by default.  A future enhancement will include a report to help you identify where the issues are in your HTML.
+
+The warnings are generated *if and when* you have malformed or invalid HTML markup.  For example, if you are missing closing `</div>` tags, have duplicate `ID` attributes, or have invalid markup, then `DOMDocument` generates warnings to alert you.  As these warnings point to where the HTML is loaded in the Swapper, they do not help you find the issues in your markup.  Therefore, a future enhancement will gather up these issues and generate a handy report for you.
 
 ## Features
 
@@ -53,7 +55,7 @@ You configure the parameters including:
 Other features include:
 
 1. Count the records to know how many will be swapped.
-2. Suppress HTML malformed errors, just in cause your HTML is fully compliant
+2. Suppress HTML malformed errors, just in case your HTML is not fully compliant
 
 ## Installation
 
@@ -93,7 +95,7 @@ Before I release this officially to [WordPress.org](https://worpress.org), there
 Future Enhancements:
 
 1. Expand it to more than just the posts database table.
-2. Process the HTML malformed error messaging to let you find the boo boos in your content more easily.
+2. Process the HTML malformed warning messages to let you find the boo boos in your content more easily.
 
 ## Contributions
 
