@@ -71,6 +71,13 @@ class Admin_Page {
 	 */
 	protected $number_tag_swaps = 0;
 
+	/**
+	 * Form validation error
+	 *
+	 * @var bool
+	 */
+	protected $validation_error = false;
+
 	/*******************
 	 * Setters
 	 ******************/
@@ -116,14 +123,16 @@ class Admin_Page {
 	/**
 	 * Instantiate the object
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 *
-	 * @param array $config
-	 * @param array $selected_settings
+	 * @param array $config Runtime configuration parameters
+	 * @param array $selected_settings Form settings
+	 * @param bool $is_processing_submit Flag if the form was submitted.
 	 */
-	public function __construct( array $config, array $selected_settings ) {
-		$this->config         = $config;
-		$this->current_values = $selected_settings;
+	public function __construct( array $config, array $selected_settings, $is_processing_submit ) {
+		$this->config           = $config;
+		$this->current_values   = $selected_settings;
+		$this->validation_error = $is_processing_submit && ! $selected_settings['attribute_value'];
 
 		$this->init_events();
 	}
@@ -194,7 +203,8 @@ class Admin_Page {
 			return;
 		}
 
-		$message_class = $this->records_count < 1 ? ' tag-swapper-no-records-processed' : '';
+		$message_class         = $this->records_count < 1 ? ' tag-swapper-no-records-processed' : '';
+		$attribute_value_class = $this->validation_error ? ' class="validation-error"' : '';
 
 		require( $view );
 	}

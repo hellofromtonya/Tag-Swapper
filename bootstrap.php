@@ -11,7 +11,7 @@
  * Plugin Name:     HTML Tag Swapper
  * Plugin URI:      https://knowthecode.io
  * Description:     HTML Tag Swapper - queries the database, replaces all occurrences of the tag when it's attributes match the specified value, and saves the records back to the database.
- * Version:         1.0.1
+ * Version:         1.0.3
  * Author:          hellofromTonya
  * Author URI:      https://knowthecode.io
  * Text Domain:     tag_swapper
@@ -51,7 +51,7 @@ define( 'TAG_SWAPPER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 /**
  * Launch the plugin
  *
- * @since 1.0.0
+ * @since 1.0.3
  *
  * @return void
  */
@@ -59,13 +59,15 @@ function launch() {
 	require_once( __DIR__ . '/assets/vendor/autoload.php' );
 
 	$selected_settings = merge_settings_with_defaults();
+	$is_processing_submit = is_processing_submit();
 
 	$admin_page = new Admin_Page(
 		include( TAG_SWAPPER_PLUGIN_DIR . 'config/admin-page.php' ),
-		$selected_settings
+		$selected_settings,
+		$is_processing_submit
 	);
 
-	if ( is_processing_submit() ) {
+	if ( is_ok_to_run_swapper( $is_processing_submit, $selected_settings ) ) {
 		launch_swapper( $selected_settings, $admin_page );
 	}
 }
@@ -131,6 +133,20 @@ function is_processing_submit() {
 	}
 
 	return $is_processing;
+}
+
+/**
+ * Checks if it's ok to run the swapper.
+ *
+ * @since 1.0.3
+ *
+ * @param bool $is_processing_submit
+ * @param array $selected_settings
+ *
+ * @return mixed
+ */
+function is_ok_to_run_swapper( $is_processing_submit, array $selected_settings ) {
+	return $is_processing_submit && $selected_settings['attribute_value'];
 }
 
 if ( is_admin() ) {

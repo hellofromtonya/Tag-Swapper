@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Form validation and error messaging added.
+
 ## 1.0.2
 
 - Bug fix. Tags after invalid HTML markup were not being swapped.  To fix this problem, we now fetch all tag nodes and then loop through them all (which is slower obviously).

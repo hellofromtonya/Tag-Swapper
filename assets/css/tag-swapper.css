@@ -1,14 +1,20 @@
 .tag-swapper-message,
-.backup-database-message {
+.backup-database-message,
+.validation-error-message {
     background-color: #627f00;
     padding: 30px;
     color: #fff;
 }
 
-.tag-swapper-no-records-processed {
-    background-color: #f00000;
+.tag-swapper-no-records-processed,
+.validation-error-message {
+    background-color: #ff0000;
 }
 
 .backup-database-message {
     background-color: #cb4b14;
+}
+
+.validation-error {
+    border-color: #ff0000 !important;
 }

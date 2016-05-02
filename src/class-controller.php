@@ -3,7 +3,7 @@
  * Tag Swapper Controller
  *
  * @package     Tag_Swapper
- * @since       1.0.1
+ * @since       1.0.3
  * @author      hellofromTonya
  * @link        https://knowthecode.io
  * @license     GNU General Public License 2.0+
@@ -21,7 +21,7 @@ class Controller {
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.0.1';
+	const VERSION = '1.0.3';
 
 	/**
 	 * The plugin's minimum WordPress requirement
@@ -118,6 +118,25 @@ class Controller {
 	public function run() {
 		$this->admin_page->setProcessIsComplete( false );
 
+		$this->run_the_swapper();
+
+		$this->admin_page->setProcessIsComplete( true, $this->swapper->number_of_swaps );
+	}
+
+	/**
+	 * Runs the swapper processes:
+	 *
+	 *      1. Fetch the records from the database
+	 *      2. Do the swap
+	 *      3. Count how many were swapped
+	 *      4. Set the count in the Admin Page (for displaying)
+	 *      5. If this is not just a counting process, update the records in the database.
+	 *
+	 * @since 1.0.3
+	 *
+	 * @return void
+	 */
+	protected function run_the_swapper() {
 		$records = $this->fetch_records();
 		$this->swap( $records );
 
@@ -127,8 +146,6 @@ class Controller {
 		if ( ! $this->is_count_process() ) {
 			$this->update_records();
 		}
-
-		$this->admin_page->setProcessIsComplete( true, $this->swapper->number_of_swaps );
 	}
 
 	/**

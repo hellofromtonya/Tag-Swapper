@@ -1,10 +1,14 @@
 <h2><?php _e( 'Welcome to Tag Swapper', 'tag_swapper' ); ?></h2>
 <hr>
 <div class="header-message">
-	<p class="backup-database-message"><strong><?php _e( 'Backup your database before running the Tag Swapper!', 'tag_swapper' ); ?></strong></p>
+	<p class="backup-database-message"><strong><?php _e( 'Please backup your database before running the Tag Swapper!', 'tag_swapper' ); ?></strong></p>
 	<p><?php _e( 'Tag Swapper uses the settings you configured below to find the HTML tag to be replaced when it has the attribute and attribute value.  Then it swaps the tag with the new one you specified.  For example, let\'s say your content has <code>&lt;p&gt;</code> tag with a <code>class</code> attribute and value of <code>headline</code>. You want that pattern to be a <code>h1</code> tag element instead of the <code>p</code>.  Tag Swapper gives you this ability.', 'tag_swapper' ); ?></p>
 	<p><?php _e( 'It grabs all of the post type records from the Posts database table, searches for the matching patterns, swaps the tags when a match is found, and then saves all of the updated records back into the database.', 'tag_swapper' ); ?></p>
 </div>
+
+<?php if ( $this->validation_error ) : ?>
+	<p class="validation-error-message"><?php _e( 'Whoops, the following red outlined fields are required in order to run the Tag Swapper.', 'tag_swapper' ); ?></p>
+<?php endif; ?>
 
 <form method="post" action="">
 	<table class="form-table">
@@ -65,10 +69,9 @@
 				</th>
 				<td>
 					<p>
-						<input type="text" name="tag_swapper[attribute_value]" id="tag_swapper_attribute_value" value="<?php esc_attr_e( $this->current_values['attribute_value'] ); ?>" placeholder="<?php _e( 'Search attribute value', 'tag_swapper' ); ?>" size="30" />
+						<input<?php echo $attribute_value_class; ?> type="text" name="tag_swapper[attribute_value]" id="tag_swapper_attribute_value" value="<?php esc_attr_e( $this->current_values['attribute_value'] ); ?>" placeholder="<?php _e( 'Search attribute value', 'tag_swapper' ); ?>" size="30" />
 					</p>
 					<span class="description"><?php _e( 'Enter the search attribute\'s value.  When the swapper finds that value and the HTML tag matches, then it will swap the old with the new tag.', 'tag_swapper' ); ?></span>
-					</p>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -116,9 +119,11 @@
 </form>
 
 <div class="messages">
-	<?php if ( $this->current_values['count_records'] === true ) : ?>
-	<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'There are %d records which contain the HTML pattern you have specified. Processed in %f seconds.', 'tag_swapper' ), (int) $this->records_count, $this->processing_time_in_seconds ); ?></p>
-	<?php elseif ( $this->process_is_complete ) : ?>
-		<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'Tag Swap is complete.  %d records were updated with %d tags swapped.  Processed in %f seconds.', 'tag_swapper' ), (int) $this->records_count, (int) $this->number_tag_swaps, $this->processing_time_in_seconds ); ?></p>
+	<?php if ( ! $this->validation_error ) : ?>
+		<?php if ( $this->current_values['count_records'] === true ) : ?>
+		<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'There are %d records which contain the HTML pattern you have specified. Processed in %f seconds.', 'tag_swapper' ), (int) $this->records_count, $this->processing_time_in_seconds ); ?></p>
+		<?php elseif ( $this->process_is_complete ) : ?>
+			<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'Tag Swap is complete.  %d records were updated with %d tags swapped.  Processed in %f seconds.', 'tag_swapper' ), (int) $this->records_count, (int) $this->number_tag_swaps, $this->processing_time_in_seconds ); ?></p>
+		<?php endif; ?>
 	<?php endif; ?>
 </div>

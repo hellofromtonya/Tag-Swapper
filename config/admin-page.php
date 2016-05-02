@@ -30,7 +30,6 @@ return array(
 		'header',
 		'footer',
 	),
-	'security_nonce' => '_tag_swapper',
 	'yes_no_labels'   => array(
 		__( 'No', 'tag_swapper' ),
 		__( 'Yes', 'tag_swapper' ),
