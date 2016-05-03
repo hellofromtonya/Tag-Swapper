@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Limit messaging on the form for submit only.
+
 ## 1.0.3
 
 - Form validation and error messaging added.

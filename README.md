@@ -77,13 +77,15 @@ Installation from GitHub is as simple as cloning the repo onto your local machin
 
 ## Configuring the Tag Swapper
 
-1. Set the HTML tag you want to find and replace (default is `p`).
-2. Set the HTML tag you want to replace it with (default is `h1`).
-3. Set the search attribute (the default is `class`).
-4. Type in the search attribute value.  For example, if you specified a `class` attribute, then type in the styling class that you want to find.
-5. Select the Post Type, such as Posts or Pages.
-6. If you want to only count the records that will be swapped, click on "Yes" for the "Just count the records" option.
-7. Then click on the "Run the Tag Swapper" button.
+1. Make sure you backup your database, as this plugin will change your database.
+2. Clear your cache if you are using a caching plugin.
+3. Set the HTML tag you want to find and replace (default is `p`).
+4. Set the HTML tag you want to replace it with (default is `h1`).
+5. Set the search attribute (the default is `class`).
+6. Type in the search attribute value.  For example, if you specified a `class` attribute, then type in the styling class that you want to find.
+7. Select the Post Type, such as Posts or Pages.
+8. If you want to do the swap, click on "No" for the "Just count the records" option.
+9. Then click on the "Run the Tag Swapper" button.
 
 ## Yet to Do
 
@@ -98,11 +100,11 @@ Future Enhancements:
 1. Expand it to more than just the posts database table.
 2. Generate a report to show you where invalid HTML is occurring in your content.
 3. Generate report for non-swapped tags when `h1` is limited to only one occurrence.
+4. Look ahead to ensure the content only has one `h1` when doing a `h1` tag swap.
 
 ## Contributions
 
 All feedback, bug reports, and pull requests are welcome.
-
 
 ## Special Thanks
 

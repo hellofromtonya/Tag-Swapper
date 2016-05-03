@@ -119,7 +119,7 @@
 </form>
 
 <div class="messages">
-	<?php if ( ! $this->validation_error ) : ?>
+	<?php if ( ! $this->validation_error && $this->is_processing_submit ) : ?>
 		<?php if ( $this->current_values['count_records'] === true ) : ?>
 		<p class="tag-swapper-message<?php echo $message_class; ?>"><?php printf( __( 'There are %d records which contain the HTML pattern you have specified. Processed in %f seconds.', 'tag_swapper' ), (int) $this->records_count, $this->processing_time_in_seconds ); ?></p>
 		<?php elseif ( $this->process_is_complete ) : ?>

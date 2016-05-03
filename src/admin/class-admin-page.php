@@ -3,7 +3,7 @@
  * Admin Page Handler - which is responsible for rendering out the Tools > Tag Swapper admin page.
  *
  * @package     Tag_Swapper\Admin
- * @since       1.0.3
+ * @since       1.0.4
  * @author      hellofromTonya
  * @link        https://knowthecode.io
  * @license     GNU General Public License 2.0+
@@ -78,6 +78,13 @@ class Admin_Page {
 	 */
 	protected $validation_error = false;
 
+	/**
+	 * Flag to indicate a submit occurred
+	 * 
+	 * @var bool
+	 */
+	protected $is_processing_submit = false;
+
 	/*******************
 	 * Setters
 	 ******************/
@@ -123,16 +130,17 @@ class Admin_Page {
 	/**
 	 * Instantiate the object
 	 *
-	 * @since 1.0.3
+	 * @since 1.0.4
 	 *
 	 * @param array $config Runtime configuration parameters
 	 * @param array $selected_settings Form settings
 	 * @param bool $is_processing_submit Flag if the form was submitted.
 	 */
 	public function __construct( array $config, array $selected_settings, $is_processing_submit ) {
-		$this->config           = $config;
-		$this->current_values   = $selected_settings;
-		$this->validation_error = $is_processing_submit && ! $selected_settings['attribute_value'];
+		$this->config               = $config;
+		$this->current_values       = $selected_settings;
+		$this->validation_error     = $is_processing_submit && ! $selected_settings['attribute_value'];
+		$this->is_processing_submit = $is_processing_submit;
 
 		$this->init_events();
 	}
